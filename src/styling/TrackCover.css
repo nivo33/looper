@@ -1,0 +1,6 @@
+  .track-cover {
+    height: 120px;
+    background-position: top center;
+    background-size: cover;
+    transition: height .4s;
+  }
