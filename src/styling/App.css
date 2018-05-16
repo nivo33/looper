@@ -1,3 +1,20 @@
 ul {
   list-style-type: none;
 }
+  .title{
+     color: #fff;
+     font-size: 50px;
+     /*-webkit-animation: random 8s infinite;*/
+     animation: random 10s infinite;
+}
+@keyframes  random {
+	from {color: black;}
+	25% {color: white;}
+	50% {color: white;}
+	to {color: black;}
+}
+
+.main-buttons{
+	text-align:center;
+	
+}

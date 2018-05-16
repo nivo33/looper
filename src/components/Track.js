@@ -8,12 +8,14 @@ export default class Track extends React.Component{
 	constructor(props){
 		super(props);
 		this.state = {
+			showing : true,
 			progress : 0,
 			repeat: false,
 			playing: false,
 			mute: false
 		};
-		this.audio = document.createElement('audio');
+		console.log(props.src);
+		this.audio = new Audio();//document.createElement('audio');
 		this.audio.src = props.src;
 		this.audio.autoplay=false;
 		this.audio.volume=1;
@@ -26,6 +28,9 @@ export default class Track extends React.Component{
     	 this.audio.addEventListener('ended', e => {
       		this.next();
     	});
+
+    	var imgNum = Math.floor(Math.random()*1000);
+  		this.imgUrl='https://picsum.photos/500/120/?image='+imgNum;
 	}
 
 	updateProgress = () => {
@@ -40,6 +45,7 @@ export default class Track extends React.Component{
   handleError = () =>{
   	alert("There is an error with one of the tracks... Sorry!");
   }
+
 
 
    setProgress = e => {
@@ -60,7 +66,7 @@ export default class Track extends React.Component{
     this.play();
   };
 
-  repeat = () =>
+  toggleRepeat = () =>
     this.setState({
       repeat: !this.state.repeat,
     });
@@ -92,6 +98,13 @@ export default class Track extends React.Component{
   	}
   };
 
+  	delete = () => {
+  		this.audio.pause();
+  		this.audio.currentTime = 0;
+  		this.setState({showing:false});
+  		this.props.addToList(this.props.id);
+  	}
+
 	toggleMute = () => {
 	    const { mute } = this.state;
 
@@ -102,10 +115,13 @@ export default class Track extends React.Component{
 	    this.audio.volume = !!mute;
 	  };
 
-	toggle = () => this.state.playing ? this.pause() : this.play();
+	togglePlay = () => this.state.playing ? this.pause() : this.play();
 
 	render(){
-		const {
+
+	if(!this.state.showing){return <div></div>}
+
+	const {
       progress,
       playing,
       repeat,
@@ -115,7 +131,8 @@ export default class Track extends React.Component{
     const {
     	artist,
     	name,
-    	bpm
+    	bpm,
+    	imgUrl
     } = this.props;
 
     const playPauseClass = classnames({
@@ -140,7 +157,7 @@ export default class Track extends React.Component{
 				return (
       <div className="player-container">
 
-        <TrackCover url='https://picsum.photos/500/500/?random'/>
+        {/*<TrackCover url={imgUrl}/>*/}
 
         <div className="artist-info-bpm">
         	<div className="artist-info">
@@ -159,7 +176,7 @@ export default class Track extends React.Component{
         <div className="player-options">
           <div className="player-buttons player-controls">
             <button
-              onClick={this.toggle}
+              onClick={this.togglePlay}
               className="player-btn big"
               title="Play/Pause"
             >
@@ -177,10 +194,17 @@ export default class Track extends React.Component{
             </button>
             <button
               className={repeatClass}
-              onClick={this.repeat}
+              onClick={this.toggleRepeat}
               title="Repeat"
             >
               <i className="fa fa-repeat"></i>
+            </button>
+            <button
+              className="player-btn small "
+              onClick={this.delete.bind(this)}
+              title="Delete"
+            >
+              <i className="fa fa-trash"></i>
             </button>
           </div>
         </div>
@@ -189,3 +213,4 @@ export default class Track extends React.Component{
     );
 	}
 }
+	
