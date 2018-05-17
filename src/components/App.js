@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import '../styling/App.css';
 import Track from './Track.js'
-import {DropdownButton,MenuItem} from 'react-bootstrap';
-
+import {ButtonToolbar, Button, DropdownButton,MenuItem} from 'react-bootstrap';
 const songs=
 [{
   'Id':1,
@@ -62,7 +61,7 @@ class App extends Component {
 
   addToList = (index) => {
     const {songs, addableSongs} = this.state;
-    addableSongs.push(songs[index]);
+    addableSongs.push(index);
     this.setState({
       addableSongs: addableSongs
     });
@@ -92,6 +91,7 @@ class App extends Component {
       rel="stylesheet"
       href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"
     />
+    
     <link
       href="https://fonts.googleapis.com/css?family=Roboto:100,400,700"
       rel="stylesheet"
@@ -100,7 +100,8 @@ class App extends Component {
 
     <h1 className="title">Looper</h1>
     <div className="main-buttons">
-      <DropdownButton title="Play All" bsStyle={"Default".toLowerCase()}>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossOrigin="anonymous"/>
+      <DropdownButton id="1" title="Play All" bsStyle="default" style = {{"marginRight":"10px"}}>
         <MenuItem eventKey="1">Action</MenuItem>
       </DropdownButton>      
       <button>

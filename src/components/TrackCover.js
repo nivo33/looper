@@ -9,7 +9,7 @@ export default class TrackCover extends Component {
     return (
  		<div 
  		className='track-cover' 
- 		style={{backgroundImage: `url(${imgUrl})`}}>
+ 		style={{backgroundImage: `url(${this.props.url})`}}>
  		</div>
     );
   }

@@ -5,6 +5,7 @@
 
 
   .player-container {
+
     width: 500px;
     margin: 10px auto auto auto;
     overflow: hidden;
@@ -23,6 +24,7 @@
   .artist-song-name,
   .bpm {
     margin: 0;
+    font-family:"Roboto";
   }
 
   .bpm{
