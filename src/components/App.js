@@ -9,9 +9,6 @@ const extractTrackName = (song) =>{
 };
 
 export default class App extends Component {
-  componentWillMount(){
-    document.title = "Looper";
-  }
 
   state = {
       addableSongs : [],
@@ -91,7 +88,7 @@ export default class App extends Component {
 
     return (
   <div className="container">
-    
+
     <link
       rel="stylesheet"
       href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"
