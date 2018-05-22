@@ -5,7 +5,7 @@ ul {
      color: #fff;
      font-size: 50px;
      font-family: "Roboto"; 
-
+     
      /*-webkit-animation: random 8s infinite;*/
      animation: random 10s infinite;
 }

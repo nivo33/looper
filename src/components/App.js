@@ -91,7 +91,7 @@ export default class App extends Component {
 
     return (
   <div className="container">
-
+    
     <link
       rel="stylesheet"
       href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"
@@ -102,7 +102,7 @@ export default class App extends Component {
       rel="stylesheet"
       type="text/css"
     />
-
+    //TODO: make sticky header
     <h1 className="title">Looper</h1>
     <div className="main-buttons">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkyc}uHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossOrigin="anonymous"/>
