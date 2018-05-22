@@ -15,9 +15,9 @@
   }
 
   .artist-info-bpm {
-    padding: 20px 35px 20px 0px;
+    padding: 20px 35px 20px 80px;
     display: flex;
-    justify-content:center;
+    justify-content:left;
   }
 
   .artist-name,
@@ -28,18 +28,16 @@
   }
 
   .bpm{
-    display: inline-block;
-    justify-content:right;
-    padding-left: 120px;
+    font-size:10px;
   }
-  .artist-name, {
+  .artist-name {
     margin-bottom: 5px;
     font-size: 20px;
     font-weight: 400;
   }
-  .artist-song-name,
-  .bpm {
+  .artist-song-name {
     font-size: 15px;
+    margin-bottom: 5px;
     font-weight: 400;
   }
   .player-progress-container {
@@ -55,7 +53,7 @@
     top: 0;
     left: 0;
     bottom: 0;
-    background-color: #FF7F50;
+    background-color: #376264;
     border-radius: 40px;
   }
   .player-progress-value:after {
@@ -66,7 +64,7 @@
     width: 15px;
     height: 15px;
     border-radius: 50%;
-    background-color: #7748B5;
+    background-color: black;
     box-shadow: rgba(0, 0, 0, 0.2) 0 0 5px 2px;
   }
   .player-options {

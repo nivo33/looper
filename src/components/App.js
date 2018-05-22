@@ -12,33 +12,30 @@ export default class App extends Component {
   
 state = {
       addableSongs : [],
+      playAll : false,
       songs : [{
         'Id':1,
         'url':'https://s3.amazonaws.com/candidate-task/Track+1.mp3',
         'owner':'Ori Winokur',
         'bpm':120,
-        'playing':false,
         'showing': true
         },{
         'Id':2,
         'url':'https://s3.amazonaws.com/candidate-task/Track+2.mp3',
         'owner':'Yonatan Pistiner',
         'bpm':100,
-        'playing':false,
         'showing': true
         },{
         'Id':3,
         'url':'https://s3.amazonaws.com/candidate-task/Track+3.mp3',
         'owner':'Barak Inbar',
         'bpm':123,
-        'playing':false,
         'showing': true
         }, {
         'Id':4,
         'url':'https://s3.amazonaws.com/candidate-task/Track+4.mp3',
         'owner':'Ori Winokur',
         'bpm':80,
-        'playing':false,
         'showing': true
         }
       ]
@@ -61,11 +58,14 @@ state = {
   }
 
   playAll = () => {
-    
+    console.log("in playall");
+    this.setState({playAll:true});
+    console.log("state updated");
   }
 
   render() {
-    const {songs, addableSongs} = this.state;
+    //TODO: Add playall class for play/stop
+    const {songs, addableSongs, playAll} = this.state;
     const trackElements = songs.map((song,i)=>{ 
       if(!song.showing){
         return null;
@@ -77,12 +77,15 @@ state = {
           src={song.url} 
           artist={song.owner} 
           bpm={song.bpm} 
+          playing={playAll}
           name={extractTrackName(song)}/>
       </li>);});
 
     const addableElements = addableSongs.map((songIndex, i ) => {
       return (
-        <MenuItem onClick={()=>{this.onAdd(songIndex)}} key={i}>{extractTrackName(songs[songIndex])}</MenuItem>);
+        <MenuItem onClick={()=>{this.onAdd(songIndex)}} key={i}>
+          {extractTrackName(songs[songIndex])}
+        </MenuItem>);
     });
 
     return (

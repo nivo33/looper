@@ -8,7 +8,7 @@ export default class Track extends Component{
 	state = {showing : true,
 			progress : 0,
 			repeat: false,
-			playing: false,
+			playing: this.props.playing,
 			mute: false};
 	// constructor(props){
 	// 	super(props);
@@ -24,7 +24,17 @@ export default class Track extends Component{
     // 	var imgNum = Math.floor(Math.random()*1000);
   		// this.imgUrl='https://picsum.photos/500/120/?image='+imgNum;
 	// }
-
+componentWillReceiveProps(nextProps){
+	const {audio} = this.state;
+	if(nextProps.playing){
+		audio.currentTime = 0;
+		this.play();
+	}
+	else{
+		this.pause();
+		audio.currentTime = 0;
+	}
+}
 componentWillMount= () =>{
 	let audio = document.createElement('audio');
 	audio.src = this.props.src;
@@ -119,13 +129,6 @@ componentWillUnmount = () => {
   	}
   };
 
-  	delete = () => {
-  		// this.state.audio.pause();
-  		// this.state.audio.currentTime = 0;
-  		// this.setState({showing:false});
-  		this.props.onDelete(this.props.index);
-  	}
-
 	toggleMute = () => {
 	    const { mute, audio } = this.state;
 
@@ -182,10 +185,8 @@ componentWillUnmount = () => {
         	<div className="artist-info">
           		<h2 className="artist-name">{artist}</h2>
           		<h3 className="artist-song-name">{name}</h3>
-         	</div>
-         	<div className="bpm">
-          		<h3 className="bpm-text"> {bpm}bpm </h3>
-          	</div>
+          		<h4 className="bpm"> bpm:{bpm} </h4>
+          		</div>
         </div>
 
         <div className="player-progress-container" onClick={e => this.setProgress(e)}>
