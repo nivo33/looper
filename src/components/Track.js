@@ -14,8 +14,8 @@ export default class Track extends React.Component{
 			playing: false,
 			mute: false
 		};
-		console.log(props.src);
-		this.audio = new Audio();//document.createElement('audio');
+
+		this.audio = document.createElement('audio');
 		this.audio.src = props.src;
 		this.audio.autoplay=false;
 		this.audio.volume=1;
@@ -46,9 +46,7 @@ export default class Track extends React.Component{
   	alert("There is an error with one of the tracks... Sorry!");
   }
 
-
-
-   setProgress = e => {
+   setProgress = (e) => {
     const target = e.target.nodeName === 'SPAN' ? e.target.parentNode : e.target;
     const width = target.clientWidth;
     const rect = target.getBoundingClientRect();
@@ -101,8 +99,8 @@ export default class Track extends React.Component{
   	delete = () => {
   		this.audio.pause();
   		this.audio.currentTime = 0;
-  		this.setState({showing:false});
-  		this.props.addToList(this.props.id);
+  		// this.setState({showing:false});
+  		this.props.onDelete(this.props.index);
   	}
 
 	toggleMute = () => {
@@ -119,7 +117,8 @@ export default class Track extends React.Component{
 
 	render(){
 
-	if(!this.state.showing){return <div></div>}
+    //check if component has been deleted
+	// if(!this.state.showing){return <div></div>}
 
 	const {
       progress,
@@ -140,7 +139,7 @@ export default class Track extends React.Component{
       'fa-play': !playing,
       'fa-pause': playing,
     });
-
+    
     const volumeClass = classnames({
       'fa': true,
       'fa-volume-up': !mute,

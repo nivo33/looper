@@ -7,6 +7,10 @@ body {
   font-size: 16px;
   color: #46546b;
   background-image: radial-gradient(circle, #fff, #d2d5d6);
+  /*background-image:  url("./images/note.png");*/
+  /*background-position: 25% 75%;*/
+  /*background-repeat: no-repeat;*/
+  /*background-attachment: fixed;*/
 }
 .container > h1 {
   text-align: center;
