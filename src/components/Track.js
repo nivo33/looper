@@ -1,40 +1,61 @@
-import React from 'react';
+import React, {Component} from 'react';
 import '../styling/Track.css';
 import 'font-awesome/css/font-awesome.min.css';
-import TrackCover from './TrackCover';
+// import TrackCover from './TrackCover';
 import classnames from 'classnames';
 
-export default class Track extends React.Component{
-	constructor(props){
-		super(props);
-		this.state = {
-			showing : true,
+export default class Track extends Component{
+	state = {showing : true,
 			progress : 0,
 			repeat: false,
 			playing: false,
-			mute: false
-		};
+			mute: false};
+	// constructor(props){
+	// 	super(props);
+		// this.state = {
+		// 	showing : true,
+		// 	progress : 0,
+		// 	repeat: false,
+		// 	playing: false,
+		// 	mute: false
+		// };
 
-		this.audio = document.createElement('audio');
-		this.audio.src = props.src;
-		this.audio.autoplay=false;
-		this.audio.volume=1;
-		this.audio.addEventListener('timeupdate', e => {
-      		this.updateProgress();
-    	});
-    	this.audio.addEventListener('error', e => {
-      		this.handleError();
-    	});
-    	 this.audio.addEventListener('ended', e => {
-      		this.next();
-    	});
+		
+    // 	var imgNum = Math.floor(Math.random()*1000);
+  		// this.imgUrl='https://picsum.photos/500/120/?image='+imgNum;
+	// }
 
-    	var imgNum = Math.floor(Math.random()*1000);
-  		this.imgUrl='https://picsum.photos/500/120/?image='+imgNum;
+componentWillMount= () =>{
+	let audio = document.createElement('audio');
+	audio.src = this.props.src;
+	audio.autoplay=false;
+	audio.volume=1;
+
+	let tupListener = e => {this.updateProgress();};
+	audio.addEventListener('timeupdate', tupListener);
+
+	let errorListener = e => {this.handleError();};
+	audio.addEventListener('error', errorListener);
+
+	let endedListener = e => {this.next();};
+	audio.addEventListener('ended', endedListener);
+
+	this.setState({listeners: {'ended':endedListener,'timeupdate':tupListener, 'error':errorListener}, audio});
+}
+
+
+componentWillUnmount = () => {
+	//need to remove listeners to avoid errors, and remove audio element to avoid mem leaks
+	const {audio, listeners} = this.state;
+	for(let key in listeners){
+		audio.removeEventListener(key, listeners[key]);
 	}
+	audio.pause();
+	this.setState({audio:null});
+}
 
 	updateProgress = () => {
-    const { duration, currentTime } = this.audio;
+    const { duration, currentTime } = this.state.audio;
     const progress = (currentTime * 100) / duration;
 
     this.setState({
@@ -47,15 +68,16 @@ export default class Track extends React.Component{
   }
 
    setProgress = (e) => {
+   	const {audio} = this.state;
     const target = e.target.nodeName === 'SPAN' ? e.target.parentNode : e.target;
     const width = target.clientWidth;
     const rect = target.getBoundingClientRect();
     const offsetX = e.clientX - rect.left;
-    const duration = this.audio.duration;
+    const duration = audio.duration;
     const currentTime = (duration * offsetX) / width;
     const progress = (currentTime * 100) / duration;
 
-    this.audio.currentTime = currentTime;
+    audio.currentTime = currentTime;
 
     this.setState({
       progress: progress,
@@ -74,7 +96,7 @@ export default class Track extends React.Component{
       playing: true,
     });
 
-    this.audio.play();
+    this.state.audio.play();
   };
 
   pause = () => {
@@ -82,14 +104,15 @@ export default class Track extends React.Component{
       playing: false,
     });
 
-    this.audio.pause();
+    this.state.audio.pause();
   };
 
   next = ()=> {
+  	const {audio, repeat} = this.state;
   	this.setState({progress:0});
-  	if(this.state.repeat){
-  		this.audio.currentTime=0;
-  		this.audio.play()
+  	if(repeat){
+  		audio.currentTime=0;
+  		audio.play();
   	}
   	else{
   		this.setState({playing:false});
@@ -97,28 +120,25 @@ export default class Track extends React.Component{
   };
 
   	delete = () => {
-  		this.audio.pause();
-  		this.audio.currentTime = 0;
+  		// this.state.audio.pause();
+  		// this.state.audio.currentTime = 0;
   		// this.setState({showing:false});
   		this.props.onDelete(this.props.index);
   	}
 
 	toggleMute = () => {
-	    const { mute } = this.state;
+	    const { mute, audio } = this.state;
 
 	    this.setState({
 	      mute: !mute,
 	    });
 
-	    this.audio.volume = !!mute;
+	    audio.volume = !!mute;
 	  };
 
 	togglePlay = () => this.state.playing ? this.pause() : this.play();
 
 	render(){
-
-    //check if component has been deleted
-	// if(!this.state.showing){return <div></div>}
 
 	const {
       progress,
@@ -131,7 +151,7 @@ export default class Track extends React.Component{
     	artist,
     	name,
     	bpm,
-    	imgUrl
+    	// imgUrl
     } = this.props;
 
     const playPauseClass = classnames({
@@ -153,7 +173,7 @@ export default class Track extends React.Component{
       'disabled': !repeat
     });
 
-				return (
+	return (
       <div className="player-container">
 
         {/*<TrackCover url={imgUrl}/>*/}
@@ -200,7 +220,7 @@ export default class Track extends React.Component{
             </button>
             <button
               className="player-btn small "
-              onClick={this.delete.bind(this)}
+              onClick={()=>{this.props.onDelete(this.props.index);}}
               title="Delete"
             >
               <i className="fa fa-trash"></i>

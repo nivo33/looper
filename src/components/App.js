@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import '../styling/App.css';
 import Track from './Track.js'
-import {ButtonToolbar, Button, DropdownButton, MenuItem} from 'react-bootstrap';
+import {Button, DropdownButton, MenuItem} from 'react-bootstrap';
 
 const extractTrackName = (song) =>{
   //extract song name
@@ -10,38 +10,39 @@ const extractTrackName = (song) =>{
 
 export default class App extends Component {
   
-  constructor(){
-    super();
-    this.state = {
+state = {
       addableSongs : [],
       songs : [{
-  'Id':1,
-  'url':'https://s3.amazonaws.com/candidate-task/Track+1.mp3',
-  'owner':'Ori Winokur',
-  'bpm':120,
-  'showing': true
-  },{
-  'Id':2,
-  'url':'https://s3.amazonaws.com/candidate-task/Track+2.mp3',
-  'owner':'Yonatan Pistiner',
-  'bpm':100,
-  'showing': true
-  },{
-  'Id':3,
-  'url':'https://s3.amazonaws.com/candidate-task/Track+3.mp3',
-  'owner':'Barak Inbar',
-  'bpm':123,
-  'showing': true
-  }, {
-  'Id':4,
-  'url':'https://s3.amazonaws.com/candidate-task/Track+4.mp3',
-  'owner':'Ori Winokur',
-  'bpm':80,
-  'showing': true
-  }
-]
-    };
-  }
+        'Id':1,
+        'url':'https://s3.amazonaws.com/candidate-task/Track+1.mp3',
+        'owner':'Ori Winokur',
+        'bpm':120,
+        'playing':false,
+        'showing': true
+        },{
+        'Id':2,
+        'url':'https://s3.amazonaws.com/candidate-task/Track+2.mp3',
+        'owner':'Yonatan Pistiner',
+        'bpm':100,
+        'playing':false,
+        'showing': true
+        },{
+        'Id':3,
+        'url':'https://s3.amazonaws.com/candidate-task/Track+3.mp3',
+        'owner':'Barak Inbar',
+        'bpm':123,
+        'playing':false,
+        'showing': true
+        }, {
+        'Id':4,
+        'url':'https://s3.amazonaws.com/candidate-task/Track+4.mp3',
+        'owner':'Ori Winokur',
+        'bpm':80,
+        'playing':false,
+        'showing': true
+        }
+      ]
+  };
 
   onDelete = (index) => {
     const {songs, addableSongs} = this.state;
@@ -50,17 +51,22 @@ export default class App extends Component {
     this.setState(this.state);
   };
 
-  // onDelete = (index) => {
-  //   const {songs } = this.state;
-  //   var removed = songs.splice(index,1);
-  //    this.setState(
-  //      {songs : songs}
-  //      );
-  // };
+  onAdd = (index) => {
+    // Add song back to looper
+    const {songs, addableSongs} = this.state;
+    songs[index].showing=true;
+    let i = addableSongs.indexOf(index);
+    addableSongs.splice(i,1);
+    this.setState(this.state);
+  }
+
+  playAll = () => {
+    
+  }
 
   render() {
     const {songs, addableSongs} = this.state;
-    const songElements = songs.map((song,i)=>{ 
+    const trackElements = songs.map((song,i)=>{ 
       if(!song.showing){
         return null;
       }
@@ -74,9 +80,9 @@ export default class App extends Component {
           name={extractTrackName(song)}/>
       </li>);});
 
-    const addables = addableSongs.map((songIndex, i ) => {
+    const addableElements = addableSongs.map((songIndex, i ) => {
       return (
-        <MenuItem key={i}>{extractTrackName(songs[songIndex])}</MenuItem>);
+        <MenuItem onClick={()=>{this.onAdd(songIndex)}} key={i}>{extractTrackName(songs[songIndex])}</MenuItem>);
     });
 
     return (
@@ -94,11 +100,11 @@ export default class App extends Component {
 
     <h1 className="title">Looper</h1>
     <div className="main-buttons">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossOrigin="anonymous"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkyc}uHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossOrigin="anonymous"/>
       <DropdownButton id="1" title="Add Track" bsStyle="default" >
-        {addables}
+        {addableElements}
       </DropdownButton>
-      <Button>
+      <Button onClick={this.playAll.bind(this)}>
         Play All
       </Button>
       <Button onClick={()=>alert("Sorry! Not yet implemented!")}>
@@ -106,9 +112,7 @@ export default class App extends Component {
       </Button>
     </div>
     <ul>
-      {songElements}
-      {/*<li><Track src='https://s3.amazonaws.com/candidate-task/Track+1.mp3' artist='Hey' name='Erik Brown' bpm='150'/> </li>
-      <li><Track src='https://s3.amazonaws.com/candidate-task/Track+1.mp3' artist='Heey' name='Erik Brown' bpm='150'/> </li>*/}
+      {trackElements}
     </ul>
     <div className="footer">Niv Oppenhaim</div>
   </div>);
