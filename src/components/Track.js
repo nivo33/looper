@@ -8,39 +8,28 @@ export default class Track extends Component{
 	state = {showing : true,
 			progress : 0,
 			repeat: false,
-			playing: this.props.playing,
+			playing: false,
 			mute: false};
-	// constructor(props){
-	// 	super(props);
-		// this.state = {
-		// 	showing : true,
-		// 	progress : 0,
-		// 	repeat: false,
-		// 	playing: false,
-		// 	mute: false
-		// };
 
-		
-    // 	var imgNum = Math.floor(Math.random()*1000);
-  		// this.imgUrl='https://picsum.photos/500/120/?image='+imgNum;
-	// }
 componentWillReceiveProps(nextProps){
 	const {audio} = this.state;
-	if(nextProps.playing){
-		audio.currentTime = 0;
+	if(nextProps.playAll){
+		audio.currentTime = 0; 
 		this.play();
+    this.setState({repeat:true});
 	}
 	else{
 		this.pause();
 		audio.currentTime = 0;
+    this.setState({repeat:false});
 	}
 }
 componentWillMount= () =>{
-	let audio = document.createElement('audio');
+  const { index} = this.props;
+	const audio = document.createElement('audio');
 	audio.src = this.props.src;
 	audio.autoplay=false;
 	audio.volume=1;
-
 	let tupListener = e => {this.updateProgress();};
 	audio.addEventListener('timeupdate', tupListener);
 
@@ -50,9 +39,9 @@ componentWillMount= () =>{
 	let endedListener = e => {this.next();};
 	audio.addEventListener('ended', endedListener);
 
+  audio.addEventListener('loadedmetadata', () => this.props.addSongLength(index, audio.duration));  
 	this.setState({listeners: {'ended':endedListener,'timeupdate':tupListener, 'error':errorListener}, audio});
 }
-
 
 componentWillUnmount = () => {
 	//need to remove listeners to avoid errors, and remove audio element to avoid mem leaks
@@ -113,7 +102,6 @@ componentWillUnmount = () => {
     this.setState({
       playing: false,
     });
-
     this.state.audio.pause();
   };
 

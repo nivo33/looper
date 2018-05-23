@@ -1,18 +1,23 @@
 import React, { Component } from 'react';
 import '../styling/App.css';
+import 'font-awesome/css/font-awesome.min.css';
 import Track from './Track.js'
+import ReactCSSTransitionGroup from 'react-addons-transition-group';
 import {Button, DropdownButton, MenuItem} from 'react-bootstrap';
 
 const extractTrackName = (song) =>{
-  //extract song name
-  return song.url.slice(song.url.lastIndexOf('/')+1, song.url.lastIndexOf('.'));
+  //remove file ending and url from song name
+  let name = song.url.slice(song.url.lastIndexOf('/')+1, song.url.lastIndexOf('.'));
+  return name.replace('+',' ');
 };
+
 
 export default class App extends Component {
 
   state = {
       addableSongs : [],
       playAll : false,
+      sync : false,
       songs : [{
         'Id':1,
         'url':'https://s3.amazonaws.com/candidate-task/Track+1.mp3',
@@ -41,6 +46,24 @@ export default class App extends Component {
       ]
   };
 
+ addSongLength = (index, length) => {
+  const {songs} = this.state;
+  songs[index].length = length;
+}
+  
+  onSync = () => {
+    const {sync,songs} = this.state;
+    if(!sync){
+      songs.sort((a,b)=> b.length - a.length);
+      this.setState({playAll:true, sync:true});
+    }
+    else{
+      songs.sort((a,b) => a.Id - b.Id);
+      this.setState({playAll:false, sync:false}); 
+    }
+
+    }
+
   onDelete = (index) => {
     const {songs, addableSongs} = this.state;
     addableSongs.push(index);
@@ -57,13 +80,14 @@ export default class App extends Component {
     this.setState(this.state);
   }
 
-  playAll = () => {
-    this.setState({playAll:true});
+  togglePlayAll = () => {
+    const {playAll} = this.state;
+    this.setState({playAll:!playAll});
   }
 
   render() {
-    //TODO: Add playall class for play/stop
-    const {songs, addableSongs, playAll} = this.state;
+    //TODO: make sticky header
+    const {songs, addableSongs, playAll, sync} = this.state;
     const trackElements = songs.map((song,i)=>{ 
       if(!song.showing){
         return null;
@@ -75,7 +99,8 @@ export default class App extends Component {
           src={song.url} 
           artist={song.owner} 
           bpm={song.bpm} 
-          playing={playAll}
+          playAll={playAll}
+          addSongLength={this.addSongLength.bind(this)}
           name={extractTrackName(song)}/>
       </li>);});
 
@@ -99,24 +124,25 @@ export default class App extends Component {
       rel="stylesheet"
       type="text/css"
     />
-    //TODO: make sticky header
+    
     <h1 className="title">Looper</h1>
     <div className="main-buttons">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkyc}uHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossOrigin="anonymous"/>
-      <DropdownButton id="1" title="Add Track" bsStyle="default" >
+      <Button title="PlayAllButton"  text={"Play"} onClick={this.togglePlayAll.bind(this)} style={{marginRight:10}}>
+       <i className={playAll ? "fa fa-stop" : "fa fa-play"}></i>
+       {playAll ? " Stop" : " Play All"}
+      </Button>
+      <DropdownButton  title="Add Track" id="1" bsStyle="default" disabled={addableSongs.length===0} style={{marginRight:10}}>
         {addableElements}
       </DropdownButton>
-      <Button onClick={this.playAll.bind(this)}>
-        Play All
-      </Button>
-      <Button onClick={()=>alert("Sorry! Not yet implemented!")}>
-        Sync
+      <Button title="SyncButton" onClick={this.onSync.bind(this)} style={{marginRight:10}}>
+        {sync ? "Unsync" : "Sync"}
       </Button>
     </div>
     <ul>
       {trackElements}
     </ul>
-    <div className="footer">Niv Oppenhaim</div>
+    <div className="footer" style={{marginBottom:10}}>Niv Oppenhaim</div>
   </div>);
   }
 }
