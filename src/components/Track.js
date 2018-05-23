@@ -157,7 +157,7 @@ componentWillUnmount = () => {
           		<h3 className="artist-song-name">{name}</h3>
           		<h4 className="bpm"> bpm:{bpm} </h4>
           </div>
-           <div className="player-controls">
+           <div className="player-btn-container">
             <CircularProgress percentage={progress}>
               <button
                 onClick={this.togglePlay}

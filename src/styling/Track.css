@@ -96,40 +96,12 @@
   .player-btn.disabled {
     opacity: .2;
   }
-  .player-controls {
+  .player-btn-container {
     width: 180px;
     padding-left: 100px;
   }
-  .player-controls .player-btn {
-    background-color: #66d9ff;
+  .player-btn-container .player-btn {
+    background-color: #99ffff;
   }
 
 
-  /*//////////OLD PROGRESS BAR///////////////*/
-  /*.player-progress-container {
-    position: relative;
-    width: 330px;
-    height: 9px;
-    margin: 0 auto;
-    background-color: white;
-    border-radius: 40px;
-  }
-  .player-progress-value {
-    position: absolute;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    background-color: #376264;
-    border-radius: 40px;
-  }
-  .player-progress-value:after {
-    position: absolute;
-    top: -3px;
-    right: -6px;
-    content: '';
-    width: 15px;
-    height: 15px;
-    border-radius: 50%;
-    background-color: black;
-    box-shadow: rgba(0, 0, 0, 0.2) 0 0 5px 2px;
-  }*/
