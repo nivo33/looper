@@ -1,8 +1,40 @@
 import React, {Component} from 'react';
-import '../styling/Track.css';
 import 'font-awesome/css/font-awesome.min.css';
-// import TrackCover from './TrackCover';
+import 'react-circular-progressbar/dist/styles.css';
+import CircularProgressbar from 'react-circular-progressbar';
 import classnames from 'classnames';
+import '../styling/Track.css';
+
+function CustomContentProgressbar(props) {
+  const { children, ...otherProps } = props;
+
+  return (
+    <div
+      style={{
+        position: "relative",
+        width: "72px",
+        height: "72px"
+      }}
+    >
+      <div style={{ position: "absolute" }}>
+        <CircularProgressbar {...otherProps} textForPercentage={null} />
+      </div>
+      <div
+        style={{
+          position: "absolute",
+          height: "100%",
+          width: "100%",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center"
+        }}
+      >
+        {props.children}
+      </div>
+    </div>
+  );
+}
 
 export default class Track extends Component{
 	state = {showing : true,
@@ -177,19 +209,22 @@ componentWillUnmount = () => {
           		</div>
         </div>
 
-        <div className="player-progress-container" onClick={e => this.setProgress(e)}>
-          <span className="player-progress-value" style={{width: progress + '%'}}></span>
-        </div>
+        
+        {/*<div className="player-progress-container" onClick={e => this.setProgress(e)}>
+                  <span className="player-progress-value" style={{width: progress + '%'}}></span>
+                </div>*/}
 
         <div className="player-options">
           <div className="player-buttons player-controls">
-            <button
-              onClick={this.togglePlay}
-              className="player-btn big"
-              title="Play/Pause"
-            >
-              <i className={playPauseClass}></i>
-            </button>
+            <CustomContentProgressbar percentage={progress}>
+              <button
+                onClick={this.togglePlay}
+                className="player-btn big"
+                title="Play/Pause"
+              >
+                <i className={playPauseClass}></i>
+              </button>
+            </CustomContentProgressbar>
           </div>
 
           <div className="player-buttons">

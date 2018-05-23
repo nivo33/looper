@@ -22,3 +22,22 @@ ul {
 	margin-top: 30px;
 	margin-bottom: 20px;
 }
+
+/*////////////  Transitions ////////////////*/
+.tracks-enter {
+  opacity: 0.01;
+}
+
+.tracks-enter.tracks-enter-active {
+  opacity: 1;
+  transition: opacity 500ms ease-in;
+}
+
+.tracks-leave {
+  opacity: 1;
+}
+
+.tracks-leave.tracks-leave-active {
+  opacity: 0.01;
+  transition: opacity 500ms ease-in;
+}

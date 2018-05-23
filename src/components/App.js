@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import '../styling/App.css';
 import 'font-awesome/css/font-awesome.min.css';
 import Track from './Track.js'
-import ReactCSSTransitionGroup from 'react-addons-transition-group';
+
+import { CSSTransitionGroup } from 'react-transition-group';
 import {Button, DropdownButton, MenuItem} from 'react-bootstrap';
 
 const extractTrackName = (song) =>{
@@ -113,22 +114,13 @@ export default class App extends Component {
 
     return (
   <div className="container">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"/>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,400,700" rel="stylesheet" type="text/css"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkyc}uHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossOrigin="anonymous"/>
 
-    <link
-      rel="stylesheet"
-      href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"
-    />
-
-    <link
-      href="https://fonts.googleapis.com/css?family=Roboto:100,400,700"
-      rel="stylesheet"
-      type="text/css"
-    />
-    
     <h1 className="title">Looper</h1>
     <div className="main-buttons">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkyc}uHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossOrigin="anonymous"/>
-      <Button title="PlayAllButton"  text={"Play"} onClick={this.togglePlayAll.bind(this)} style={{marginRight:10}}>
+      <Button title="PlayAllButton" onClick={this.togglePlayAll.bind(this)} style={{marginRight:10}}>
        <i className={playAll ? "fa fa-stop" : "fa fa-play"}></i>
        {playAll ? " Stop" : " Play All"}
       </Button>
@@ -140,7 +132,9 @@ export default class App extends Component {
       </Button>
     </div>
     <ul>
-      {trackElements}
+    <CSSTransitionGroup transitionName="tracks" transitionEnterTimeout={500} transitionLeaveTimeout={500}>
+        {trackElements}
+      </CSSTransitionGroup>
     </ul>
     <div className="footer" style={{marginBottom:10}}>Niv Oppenhaim</div>
   </div>);
