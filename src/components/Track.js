@@ -1,40 +1,9 @@
 import React, {Component} from 'react';
 import 'font-awesome/css/font-awesome.min.css';
-import 'react-circular-progressbar/dist/styles.css';
-import CircularProgressbar from 'react-circular-progressbar';
+
 import classnames from 'classnames';
 import '../styling/Track.css';
-
-function CustomContentProgressbar(props) {
-  const { children, ...otherProps } = props;
-
-  return (
-    <div
-      style={{
-        position: "relative",
-        width: "72px",
-        height: "72px"
-      }}
-    >
-      <div style={{ position: "absolute" }}>
-        <CircularProgressbar {...otherProps} textForPercentage={null} />
-      </div>
-      <div
-        style={{
-          position: "absolute",
-          height: "100%",
-          width: "100%",
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-          alignItems: "center"
-        }}
-      >
-        {props.children}
-      </div>
-    </div>
-  );
-}
+import CircularProgress from './CircularProgress';
 
 export default class Track extends Component{
 	state = {showing : true,
@@ -71,6 +40,7 @@ componentWillMount= () =>{
 	let endedListener = e => {this.next();};
 	audio.addEventListener('ended', endedListener);
 
+  //when data is loaded, send back to parent for sync
   audio.addEventListener('loadedmetadata', () => this.props.addSongLength(index, audio.duration));  
 	this.setState({listeners: {'ended':endedListener,'timeupdate':tupListener, 'error':errorListener}, audio});
 }
@@ -97,25 +67,6 @@ componentWillUnmount = () => {
   handleError = () =>{
   	alert("There is an error with one of the tracks... Sorry!");
   }
-
-   setProgress = (e) => {
-   	const {audio} = this.state;
-    const target = e.target.nodeName === 'SPAN' ? e.target.parentNode : e.target;
-    const width = target.clientWidth;
-    const rect = target.getBoundingClientRect();
-    const offsetX = e.clientX - rect.left;
-    const duration = audio.duration;
-    const currentTime = (duration * offsetX) / width;
-    const progress = (currentTime * 100) / duration;
-
-    audio.currentTime = currentTime;
-
-    this.setState({
-      progress: progress,
-    });
-
-    this.play();
-  };
 
   toggleRepeat = () =>
     this.setState({
@@ -173,8 +124,7 @@ componentWillUnmount = () => {
     const {
     	artist,
     	name,
-    	bpm,
-    	// imgUrl
+    	bpm
     } = this.props;
 
     const playPauseClass = classnames({
@@ -208,7 +158,7 @@ componentWillUnmount = () => {
           		<h4 className="bpm"> bpm:{bpm} </h4>
           </div>
            <div className="player-controls">
-            <CustomContentProgressbar percentage={progress}>
+            <CircularProgress percentage={progress}>
               <button
                 onClick={this.togglePlay}
                 className="player-btn big"
@@ -216,7 +166,7 @@ componentWillUnmount = () => {
               >
                 <i className={playPauseClass}></i>
               </button>
-            </CustomContentProgressbar>
+            </CircularProgress>
           </div>
         </div>
 

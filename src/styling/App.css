@@ -1,18 +1,23 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto:100,400,700');
+
 ul {
   list-style-type: none;
 }
-  .title{
-     color: #fff;
-     font-size: 50px;
-     font-family: "Roboto"; 
-     
-     /*-webkit-animation: random 8s infinite;*/
-     animation: random 10s infinite;
+.test{
+  color: #ffd480;
 }
-@keyframes  random {
+.title{
+   color: #fff;
+   font-size: 50px;
+   font-family: "Roboto"; 
+   /*-webkit-animation: random 8s infinite;*/
+   animation: colorChange 10s infinite;
+}
+
+@keyframes  colorChange {
 	from {color: black;}
-	25% {color: white;}
-	50% {color: white;}
+	25% {color: grey;}
+	50% {color: grey;}
 	to {color: black;}
 }
 

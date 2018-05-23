@@ -1,10 +1,13 @@
 import React, { Component } from 'react';
-import '../styling/App.css';
 import 'font-awesome/css/font-awesome.min.css';
 import Track from './Track.js'
 
+import 'react-sticky-header/styles.css';
+import StickyHeader from 'react-sticky-header';
+
 import { CSSTransitionGroup } from 'react-transition-group';
 import {Button, DropdownButton, MenuItem} from 'react-bootstrap';
+import '../styling/App.css';
 
 const extractTrackName = (song) =>{
   //remove file ending and url from song name
@@ -115,19 +118,19 @@ export default class App extends Component {
     return (
   <div className="container">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"/>
-    <link href="https://fonts.googleapis.com/css?family=Roboto:100,400,700" rel="stylesheet" type="text/css"/>
+    
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkyc}uHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossOrigin="anonymous"/>
 
     <h1 className="title">Looper</h1>
     <div className="main-buttons">
-      <Button title="PlayAllButton" onClick={this.togglePlayAll.bind(this)} style={{marginRight:10}}>
+      <Button title="PlayAllButton" onClick={this.togglePlayAll.bind(this)} style={{marginRight:10, backgroundColor:'#ffeecc'}}>
        <i className={playAll ? "fa fa-stop" : "fa fa-play"}></i>
        {playAll ? " Stop" : " Play All"}
       </Button>
-      <DropdownButton  title="Add Track" id="1" bsStyle="default" disabled={addableSongs.length===0} style={{marginRight:10}}>
+      <DropdownButton  title="Add Track" id="1" bsStyle="default" disabled={addableSongs.length===0} style={{marginRight:10, backgroundColor:'#ffeecc'}}>
         {addableElements}
       </DropdownButton>
-      <Button title="SyncButton" onClick={this.onSync.bind(this)} style={{marginRight:10}}>
+      <Button title="SyncButton" onClick={this.onSync.bind(this)} style={{marginRight:10, backgroundColor:'#ffeecc'}}>
         {sync ? "Unsync" : "Sync"}
       </Button>
     </div>
