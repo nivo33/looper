@@ -6,16 +6,18 @@
 
   .player-container {
 
-    width: 500px;
+    width: 400px;
+
     margin: 10px auto auto auto;
     overflow: hidden;
-    background-color: #FD795E;
+    background-color: #ffd480;
     border-radius: 20px;
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
   }
 
-  .artist-info-bpm {
-    padding: 20px 35px 20px 80px;
+  .artist-info-bpm-container {
+    padding: 20px 35px 0 30px;
+    width: 500px;
     display: flex;
     justify-content:left;
   }
@@ -24,60 +26,34 @@
   .artist-song-name,
   .bpm {
     margin: 0;
-    font-family:"Roboto";
+    width:170px;
   }
 
   .bpm{
-    font-size:10px;
+    font-size:13px;
   }
   .artist-name {
     margin-bottom: 5px;
-    font-size: 20px;
+    font-size: 23px;
     font-weight: 400;
   }
   .artist-song-name {
-    font-size: 15px;
+    font-size: 18px;
     margin-bottom: 5px;
     font-weight: 400;
   }
-  .player-progress-container {
-    position: relative;
-    width: 330px;
-    height: 9px;
-    margin: 0 auto;
-    background-color: white;
-    border-radius: 40px;
-  }
-  .player-progress-value {
-    position: absolute;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    background-color: #376264;
-    border-radius: 40px;
-  }
-  .player-progress-value:after {
-    position: absolute;
-    top: -3px;
-    right: -6px;
-    content: '';
-    width: 15px;
-    height: 15px;
-    border-radius: 50%;
-    background-color: black;
-    box-shadow: rgba(0, 0, 0, 0.2) 0 0 5px 2px;
-  }
-  .player-options {
+  
+  .mute-shuffle-repeat-container {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     padding: 40px 0 20px;
     width: 365px;
     margin: 0 auto;
   }
   .player-buttons {
     display: inline-flex;
-    justify-content: space-between;
-    align-items: center;
+    justify-content: right;
+    align-items: right;
     width: 135px;
   }
   .player-btn {
@@ -94,6 +70,8 @@
   .player-btn i {
     font-size: 28px;
     margin: 0 auto;
+    color: #ffff99;
+
   }
   .player-btn.active {
     color: black;
@@ -120,8 +98,38 @@
   }
   .player-controls {
     width: 180px;
+    padding-left: 100px;
   }
   .player-controls .player-btn {
-    color: #D9D9D9;
-    background-color: #414141;
+    background-color: #66d9ff;
   }
+
+
+  /*//////////OLD PROGRESS BAR///////////////*/
+  /*.player-progress-container {
+    position: relative;
+    width: 330px;
+    height: 9px;
+    margin: 0 auto;
+    background-color: white;
+    border-radius: 40px;
+  }
+  .player-progress-value {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    background-color: #376264;
+    border-radius: 40px;
+  }
+  .player-progress-value:after {
+    position: absolute;
+    top: -3px;
+    right: -6px;
+    content: '';
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    background-color: black;
+    box-shadow: rgba(0, 0, 0, 0.2) 0 0 5px 2px;
+  }*/

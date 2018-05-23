@@ -201,21 +201,13 @@ componentWillUnmount = () => {
 
         {/*<TrackCover url={imgUrl}/>*/}
 
-        <div className="artist-info-bpm">
+        <div className="artist-info-bpm-container">
         	<div className="artist-info">
           		<h2 className="artist-name">{artist}</h2>
           		<h3 className="artist-song-name">{name}</h3>
           		<h4 className="bpm"> bpm:{bpm} </h4>
-          		</div>
-        </div>
-
-        
-        {/*<div className="player-progress-container" onClick={e => this.setProgress(e)}>
-                  <span className="player-progress-value" style={{width: progress + '%'}}></span>
-                </div>*/}
-
-        <div className="player-options">
-          <div className="player-buttons player-controls">
+          </div>
+           <div className="player-controls">
             <CustomContentProgressbar percentage={progress}>
               <button
                 onClick={this.togglePlay}
@@ -226,6 +218,15 @@ componentWillUnmount = () => {
               </button>
             </CustomContentProgressbar>
           </div>
+        </div>
+
+        
+        {/*<div className="player-progress-container" onClick={e => this.setProgress(e)}>
+                  <span className="player-progress-value" style={{width: progress + '%'}}></span>
+                </div>*/}
+
+        <div className="mute-shuffle-repeat-container">
+         
 
           <div className="player-buttons">
             <button
