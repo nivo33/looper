@@ -1,59 +1,66 @@
 import React, {Component} from 'react';
-import 'font-awesome/css/font-awesome.min.css';
-
 import classnames from 'classnames';
-import '../styling/Track.css';
 import CircularProgress from './CircularProgress';
+import {Button} from 'react-bootstrap';
+import PropTypes from 'prop-types';
+import 'font-awesome/css/font-awesome.min.css';
+import '../styling/Track.css';
 
 export default class Track extends Component{
-	state = {showing : true,
-			progress : 0,
-			repeat: false,
-			playing: false,
-			mute: false};
 
-componentWillReceiveProps(nextProps){
-	const {audio} = this.state;
-	if(nextProps.playAll){
-		audio.currentTime = 0; 
-		this.play();
-    this.setState({repeat:true});
-	}
-	else{
-		this.pause();
-		audio.currentTime = 0;
-    this.setState({repeat:false});
-	}
-}
-componentWillMount= () =>{
-  const { index} = this.props;
-	const audio = document.createElement('audio');
-	audio.src = this.props.src;
-	audio.autoplay=false;
-	audio.volume=1;
-	let tupListener = e => {this.updateProgress();};
-	audio.addEventListener('timeupdate', tupListener);
+	state = {
+    showing : true,
+		progress : 0,
+		repeat: false,
+		playing: false,
+		mute: false
+  };
 
-	let errorListener = e => {this.handleError();};
-	audio.addEventListener('error', errorListener);
+  componentWillReceiveProps(nextProps){
+    //check if playAll has been set, act accordingly
+  	const {audio} = this.state;
+  	if(nextProps.playAll){
+  		audio.currentTime = 0; 
+  		this.play();
+      this.setState({repeat:true});
+  	}
+  	else{
+  		this.pause();
+  		audio.currentTime = 0;
+      this.setState({repeat:false});
+  	}
+  }
 
-	let endedListener = e => {this.next();};
-	audio.addEventListener('ended', endedListener);
+  componentWillMount= () =>{
+    //set all event handlers for audio element
+    const {index} = this.props;
+  	const audio = document.createElement('audio');
+  	audio.src = this.props.src;
+  	audio.autoplay=false;
+  	audio.volume=1;
+  	let tupListener = e => {this.updateProgress();};
+  	audio.addEventListener('timeupdate', tupListener);
 
-  //when data is loaded, send back to parent for sync
-  audio.addEventListener('loadedmetadata', () => this.props.addSongLength(index, audio.duration));  
-	this.setState({listeners: {'ended':endedListener,'timeupdate':tupListener, 'error':errorListener}, audio});
-}
+  	let errorListener = e => {this.handleError();};
+  	audio.addEventListener('error', errorListener);
 
-componentWillUnmount = () => {
-	//need to remove listeners to avoid errors, and remove audio element to avoid mem leaks
-	const {audio, listeners} = this.state;
-	for(let key in listeners){
-		audio.removeEventListener(key, listeners[key]);
-	}
-	audio.pause();
-	this.setState({audio:null});
-}
+  	let endedListener = e => {this.next();};
+  	audio.addEventListener('ended', endedListener);
+
+    //when data is loaded, send back duration to parent to support sync
+    audio.addEventListener('loadedmetadata', () => this.props.addSongLength(index, audio.duration));  
+  	this.setState({listeners: {'ended':endedListener,'timeupdate':tupListener, 'error':errorListener}, audio});
+  }
+
+  componentWillUnmount = () => {
+  	//remove listeners to avoid errors with pausing, and remove audio element to avoid mem leaks
+  	const {audio, listeners} = this.state;
+  	for(let key in listeners){
+  		audio.removeEventListener(key, listeners[key]);
+  	}
+  	audio.pause();
+  	this.setState({audio:null});
+  }
 
 	updateProgress = () => {
     const { duration, currentTime } = this.state.audio;
@@ -65,7 +72,7 @@ componentWillUnmount = () => {
   };
 
   handleError = () =>{
-  	alert("There is an error with one of the tracks... Sorry!");
+  	alert("There is an error with one of the tracks!");
   }
 
   toggleRepeat = () =>
@@ -102,7 +109,6 @@ componentWillUnmount = () => {
 
 	toggleMute = () => {
 	    const { mute, audio } = this.state;
-
 	    this.setState({
 	      mute: !mute,
 	    });
@@ -114,7 +120,7 @@ componentWillUnmount = () => {
 
 	render(){
 
-	const {
+  	const {
       progress,
       playing,
       repeat,
@@ -124,9 +130,14 @@ componentWillUnmount = () => {
     const {
     	artist,
     	name,
-    	bpm
+    	bpm,
+      index,
+      oldBpm,
+      onDelete,
+      onUnsync
     } = this.props;
 
+    //BUTTON CLASSES
     const playPauseClass = classnames({
       'fa': true,
       'fa-play': !playing,
@@ -139,7 +150,6 @@ componentWillUnmount = () => {
       'fa-volume-off': mute,
     });
 
-
     const repeatClass = classnames({
       'player-btn small repeat': true,
       'active': repeat,
@@ -148,21 +158,35 @@ componentWillUnmount = () => {
 
 	return (
       <div className="player-container">
-
-        {/*<TrackCover url={imgUrl}/>*/}
-
         <div className="artist-info-bpm-container">
         	<div className="artist-info">
-          		<h2 className="artist-name">{artist}</h2>
-          		<h3 className="artist-song-name">{name}</h3>
-          		<h4 className="bpm"> bpm:{bpm} </h4>
+          		<h2 className="artist-name" title="Artist">
+                {artist}
+              </h2>
+          		<h3 className="artist-song-name" title="Song">
+                {name}
+              </h3>
+          		<h4 className="bpm"> 
+                BPM:{bpm} 
+              </h4>
+              {oldBpm !== 0 ? 
+                <Button 
+                  title="Reset BPM"
+                  bsSize="xsmall" 
+                  style={{backgroundColor:'#ffd480', color:'#8c8c8c'}}
+                  onClick={()=>onUnsync(index)}
+                >
+                  Old BPM:{oldBpm}
+                </Button> 
+                : null
+              }
           </div>
            <div className="player-btn-container">
             <CircularProgress percentage={progress}>
               <button
+                title="Play/Pause"
                 onClick={this.togglePlay}
                 className="player-btn big"
-                title="Play/Pause"
               >
                 <i className={playPauseClass}></i>
               </button>
@@ -170,41 +194,50 @@ componentWillUnmount = () => {
           </div>
         </div>
 
-        
-        {/*<div className="player-progress-container" onClick={e => this.setProgress(e)}>
-                  <span className="player-progress-value" style={{width: progress + '%'}}></span>
-                </div>*/}
-
         <div className="mute-shuffle-repeat-container">
-         
-
           <div className="player-buttons">
             <button
+              title="Mute/Unmute"
               className="player-btn small volume"
               onClick={this.toggleMute}
-              title="Mute/Unmute"
             >
               <i className={volumeClass}></i>
             </button>
             <button
+              title="Repeat"
               className={repeatClass}
               onClick={this.toggleRepeat}
-              title="Repeat"
             >
               <i className="fa fa-repeat"></i>
             </button>
             <button
-              className="player-btn small "
-              onClick={()=>{this.props.onDelete(this.props.index);}}
               title="Delete"
+              className="player-btn small "
+              onClick={()=>{onDelete(index)}}
             >
               <i className="fa fa-trash"></i>
             </button>
           </div>
         </div>
-
       </div>
     );
 	}
 }
-	
+
+Track.defaultProps = {
+  addSongLength : (a,b) => {},
+  playAll : false,
+  bpm : 0
+	}
+
+Track.propTypes = {
+  index: PropTypes.number,
+  onDelete: PropTypes.func,
+  src: PropTypes.string,
+  artist: PropTypes.string,
+  bpm: PropTypes.number,
+  oldBpm: PropTypes.number,
+  playAll: PropTypes.bool,
+  name: PropTypes.string,
+  onUnsync: PropTypes.func
+}
