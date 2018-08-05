@@ -1,5 +1,10 @@
 @import url('https://fonts.googleapis.com/css?family=Roboto:100,400,700');
 
+button:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 3px 6px 0 rgba(13, 13, 13, 0.5);
+}
+
 ul {
   list-style-type: none;
 }
