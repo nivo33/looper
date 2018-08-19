@@ -31,20 +31,20 @@ export default class Track extends Component{
   	}
   }
 
-  componentWillMount= () =>{
+  componentWillMount() {
     //set all event handlers for audio element
     const {index} = this.props;
   	const audio = document.createElement('audio');
   	audio.src = this.props.src;
   	audio.autoplay=false;
   	audio.volume=1;
-  	let tupListener = e => {this.updateProgress();};
+  	let tupListener = () => {this.updateProgress();};
   	audio.addEventListener('timeupdate', tupListener);
 
-  	let errorListener = e => {this.handleError();};
+  	let errorListener = () => {this.handleError();};
   	audio.addEventListener('error', errorListener);
 
-  	let endedListener = e => {this.next();};
+  	let endedListener = () => {this.next();};
   	audio.addEventListener('ended', endedListener);
 
     //when data is loaded, send back duration to parent to support sync
@@ -52,7 +52,7 @@ export default class Track extends Component{
   	this.setState({listeners: {'ended':endedListener,'timeupdate':tupListener, 'error':errorListener}, audio});
   }
 
-  componentWillUnmount = () => {
+  componentWillUnmount() {
   	//remove listeners to avoid errors with pausing, and remove audio element to avoid mem leaks
   	const {audio, listeners} = this.state;
   	for(let key in listeners){
@@ -73,7 +73,7 @@ export default class Track extends Component{
 
   handleError = () =>{
   	alert("There is an error with one of the tracks!");
-  }
+  };
 
   toggleRepeat = () =>
     this.setState({
@@ -188,7 +188,7 @@ export default class Track extends Component{
                 onClick={this.togglePlay}
                 className="player-btn big"
               >
-                <i className={playPauseClass}></i>
+                <i className={playPauseClass}/>
               </button>
             </CircularProgress>
           </div>
@@ -201,21 +201,21 @@ export default class Track extends Component{
               className="player-btn small volume"
               onClick={this.toggleMute}
             >
-              <i className={volumeClass}></i>
+              <i className={volumeClass}/>
             </button>
             <button
               title="Repeat"
               className={repeatClass}
               onClick={this.toggleRepeat}
             >
-              <i className="fa fa-repeat"></i>
+              <i className="fa fa-repeat"/>
             </button>
             <button
               title="Delete"
               className="player-btn small "
               onClick={()=>{onDelete(index)}}
             >
-              <i className="fa fa-trash"></i>
+              <i className="fa fa-trash"/>
             </button>
           </div>
         </div>
@@ -228,7 +228,7 @@ Track.defaultProps = {
   addSongLength : (a,b) => {},
   playAll : false,
   bpm : 0
-	}
+	};
 
 Track.propTypes = {
   index: PropTypes.number,
@@ -240,4 +240,4 @@ Track.propTypes = {
   playAll: PropTypes.bool,
   name: PropTypes.string,
   onUnsync: PropTypes.func
-}
+};

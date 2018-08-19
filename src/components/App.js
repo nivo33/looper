@@ -11,51 +11,61 @@ const mainButtonsStyle = {marginRight:10, backgroundColor:'#ffeecc'};
 export default class App extends Component {
 
   state = {
-      addableSongs : [0,1,2,3],
+      addableSongs : [0,1,2,3,4],
       playAll : false,
       sync : false,
       songs : [{
         'Id':1,
-        'url':'https://s3.amazonaws.com/candidate-task/Track+1.mp3',
-        'owner':'Ori Winokur',
+        'url':'https://sampleswap.org/samples-ghost/REMIXABLE%20COLLECTIONS/Grinning%20In%20Your%20Face%20Blues/5021[kb]132_4bars-grinning-drums-loop.aif.mp3',
+        'owner':'Ori Wino',
         'bpm':120,
         'showing': false,
         'sync' : false
         },{
         'Id':2,
-        'url':'https://s3.amazonaws.com/candidate-task/Track+2.mp3',
-        'owner':'Yonatan Pistiner',
+        'url':'https://sampleswap.org/samples-ghost/REMIXABLE%20COLLECTIONS/Grinning%20In%20Your%20Face%20Blues/1255[kb]132_grinning-guitar-loop.aif.mp3',
+        'owner':'Yona Piliz',
         'bpm':100,
         'showing': false,
         'sync' : false
         },{
         'Id':3,
-        'url':'https://s3.amazonaws.com/candidate-task/Track+3.mp3',
-        'owner':'Barak Inbar',
+        'url':'https://sampleswap.org/samples-ghost/REMIXABLE%20COLLECTIONS/Grinning%20In%20Your%20Face%20Blues/1255[kb]132_grinning-drum-funk.aif.mp3',
+        'owner':'Bar Inbal',
         'bpm':123,
         'showing': false,
         'sync' : false
         }, {
         'Id':4,
-        'url':'https://s3.amazonaws.com/candidate-task/Track+4.mp3',
-        'owner':'Ori Winokur',
+        'url':'https://sampleswap.org/samples-ghost/REMIXABLE%20COLLECTIONS/%20REMIXABLE%20BITS/2390[kb]wide-open-synth-melody.aif.mp3',
+        'owner':'Oreen Winok',
         'bpm':80,
         'showing': false,
         'sync' : false
-        }
+        }, {
+        'Id':5,
+        'url':'https://sampleswap.org/samples-ghost/REMIXABLE%20COLLECTIONS/%20REMIXABLE%20BITS/4452[kb]all-your-guitar.aif.mp3',
+        'owner':'James Man',
+        'bpm':90,
+        'showing': false,
+        'sync' : false
+      }
       ]
   };
 
   addSongLength = (index, length) => {
     const {songs} = this.state;
     songs[index].length = length;
-  }
+  };
 
   extractTrackName = (song) =>{
     //remove file ending and url from song name
-    let name = song.url.slice(song.url.lastIndexOf('/')+1, song.url.lastIndexOf('.'));
-    return name.replace('+',' ');
-  }
+    let name = song.url.slice(song.url.lastIndexOf(']')+1, song.url.lastIndexOf('.'));
+    name = name.replace(/-|_|.aif/g,' ');
+    let nameArr = name.split(' ');
+    nameArr.forEach((name, index) => nameArr[index] = name.charAt(0).toUpperCase() + name.slice(1));
+    return nameArr.join(' ');
+  };
 
   onSync = () => {
     //Update global and per-song sync status
@@ -70,14 +80,14 @@ export default class App extends Component {
       songs.sort((a,b) => a.Id - b.Id);
       this.setState({playAll:false, sync:false}); 
     }
-  }
+  };
 
   onDelete = (index) => {
     const {songs, addableSongs} = this.state;
     addableSongs.push(index);
     songs[index].showing = false;
     this.setState(this.state);
-  }
+  };
 
   onAdd = (index) => {
     // Add song back to looper
@@ -88,7 +98,7 @@ export default class App extends Component {
     if(sync)
       Popup.alert("Looks like you added a new song! Press sync again to re-sync");
     this.setState(this.state);
-  }
+  };
 
   stopSingleTrackSync(index){
     const {songs} = this.state;
@@ -99,7 +109,7 @@ export default class App extends Component {
   togglePlayAll = () => {
     const {playAll} = this.state;
     this.setState({playAll:!playAll});
-  }
+  };
 
   getMaxShowingBPM = () => {
     const {songs} = this.state;
@@ -108,9 +118,9 @@ export default class App extends Component {
         return song.bpm;
       else 
         return currBPM;
-    }
+    };
     return songs.reduce(reducer, 0);
-  }
+  };
 
   render() {
     const {songs, addableSongs, playAll, sync} = this.state;
@@ -121,16 +131,18 @@ export default class App extends Component {
       }
       return (
       <li key={i} >
-        <Track index={i} 
-          onDelete={this.onDelete.bind(this)} 
-          src={song.url} 
-          artist={song.owner} 
-          bpm={song.sync ? this.getMaxShowingBPM() : song.bpm}
-          oldBpm={song.sync ? song.bpm : 0}
-          onUnsync={this.stopSingleTrackSync.bind(this)}
-          playAll={playAll}
-          addSongLength={this.addSongLength.bind(this)}
-          name={this.extractTrackName(song)}/>
+        <Track
+            index={i}
+            onDelete={this.onDelete.bind(this)}
+            src={song.url}
+            artist={song.owner}
+            bpm={song.sync ? this.getMaxShowingBPM() : song.bpm}
+            oldBpm={song.sync ? song.bpm : 0}
+            onUnsync={this.stopSingleTrackSync.bind(this)}
+            playAll={playAll}
+            addSongLength={this.addSongLength.bind(this)}
+            name={this.extractTrackName(song)}
+        />
       </li>);
     });
 
@@ -155,7 +167,7 @@ export default class App extends Component {
         style={mainButtonsStyle}
         disabled={addableSongs.length === songs.length}
       >
-        <i className={playAll ? "fa fa-stop" : "fa fa-play"}></i>
+        <i className={playAll ? "fa fa-stop" : "fa fa-play"}/>
         {playAll ? " Stop" : " Play All"}
       </Button>
       <DropdownButton  
