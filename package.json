@@ -2,6 +2,7 @@
   "name": "looper",
   "version": "0.1.0",
   "private": true,
+  "homepage":  "https://nivo33.github.io/looper",
   "dependencies": {
     "classnames": "^2.2.5",
     "font-awesome": "^4.7.0",
@@ -13,8 +14,12 @@
     "react-scripts": "0.9.5",
     "react-transition-group": "^1.2.1"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "gh-pages": "^1.2.0"
+  },
   "scripts": {
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
